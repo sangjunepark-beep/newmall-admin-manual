@@ -4,281 +4,527 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>하나사인몰 신규몰 관리자 페이지 매뉴얼</title>
-<meta name="description" content="하나사인몰 신규몰 관리자 페이지 사용 매뉴얼 — 카테고리, 팝업, 기획전, 추천검색어 등 운영 가이드" />
+<meta name="description" content="하나사인몰 신규몰 관리자 페이지 운영 매뉴얼 — 카테고리, 팝업, 기획전, 공지사항, 검색·정렬 등" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <style>
   :root {
-    --bg: #f6f7f9;
+    --bg: #f7f8fb;
     --bg-elev: #ffffff;
-    --text: #1a1d24;
-    --text-mute: #5b6471;
-    --border: #e3e6ec;
-    --accent: #2563eb;
-    --accent-soft: #e7efff;
-    --tag-bg: #eef1f6;
-    --tag-text: #424a5a;
-    --code-bg: #0f172a;
-    --code-text: #e2e8f0;
-    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(15,23,42,.05);
-    --radius: 10px;
+    --bg-soft: #f1f3f7;
+    --text: #0f172a;
+    --text-mute: #5b6477;
+    --text-faint: #9aa3b3;
+    --border: #e6e9f0;
+    --border-strong: #d6dbe5;
+    --accent: #4f46e5;
+    --accent-2: #7c3aed;
+    --accent-soft: #eef0ff;
+    --accent-text: #4338ca;
+    --tag-bg: #eef1f7;
+    --tag-text: #475167;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.04);
+    --shadow-md: 0 4px 14px rgba(15,23,42,.06);
+    --shadow-lg: 0 10px 30px rgba(15,23,42,.08);
+    --radius: 12px;
+    --radius-lg: 16px;
+
+    --grp-운영룰: #ef4444;
+    --grp-카테고리: #f59e0b;
+    --grp-메인: #06b6d4;
+    --grp-팝업창: #8b5cf6;
+    --grp-기획전: #ec4899;
+    --grp-공지사항: #10b981;
+    --grp-자료실: #64748b;
+    --grp-검색정렬: #3b82f6;
+    --grp-상세페이지: #14b8a6;
+    --grp-기타: #94a3b8;
+
+    --badge-중요-bg: #fee2e2;
+    --badge-중요-fg: #b91c1c;
+    --badge-주의-bg: #fef3c7;
+    --badge-주의-fg: #92400e;
+    --badge-참고-bg: #dbeafe;
+    --badge-참고-fg: #1e40af;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #0f1115;
-      --bg-elev: #161a21;
-      --text: #e7ebf3;
-      --text-mute: #98a1b0;
-      --border: #232934;
-      --accent: #6aa3ff;
-      --accent-soft: #1a2740;
-      --tag-bg: #232934;
+      --bg: #0b0d12;
+      --bg-elev: #14171f;
+      --bg-soft: #1a1e28;
+      --text: #e8ebf3;
+      --text-mute: #98a1b3;
+      --text-faint: #6b7488;
+      --border: #232834;
+      --border-strong: #2c323f;
+      --accent: #818cf8;
+      --accent-2: #a78bfa;
+      --accent-soft: #1c1f3a;
+      --accent-text: #c7d0ff;
+      --tag-bg: #232834;
       --tag-text: #c7cfdc;
-      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.4);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+      --shadow-md: 0 4px 14px rgba(0,0,0,.35);
+      --shadow-lg: 0 10px 30px rgba(0,0,0,.45);
+      --badge-중요-bg: #3b1818;
+      --badge-중요-fg: #fca5a5;
+      --badge-주의-bg: #3a2a0a;
+      --badge-주의-fg: #fcd34d;
+      --badge-참고-bg: #15224a;
+      --badge-참고-fg: #93c5fd;
     }
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.6;
+    line-height: 1.65;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -.005em;
   }
+  ::selection { background: var(--accent-soft); color: var(--accent-text); }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
   /* Layout */
   .layout {
     display: grid;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 300px 1fr;
     min-height: 100vh;
   }
-  @media (max-width: 900px) {
+  @media (max-width: 980px) {
     .layout { grid-template-columns: 1fr; }
-    .sidebar { position: static !important; height: auto !important; border-right: 0 !important; border-bottom: 1px solid var(--border); }
-    .sidebar-inner { max-height: 50vh; overflow-y: auto; }
+    .sidebar {
+      position: sticky !important;
+      top: 0;
+      height: auto !important;
+      max-height: 100vh;
+      border-right: 0 !important;
+      border-bottom: 1px solid var(--border);
+      z-index: 50;
+    }
   }
 
   /* Sidebar */
   .sidebar {
-    background: var(--bg-elev);
+    background: linear-gradient(180deg, var(--bg-elev) 0%, var(--bg-elev) 60%, var(--bg) 100%);
     border-right: 1px solid var(--border);
     position: sticky;
     top: 0;
     height: 100vh;
     overflow-y: auto;
   }
-  .sidebar-inner { padding: 20px 16px; }
-  .brand {
-    font-weight: 700;
-    font-size: 16px;
-    margin-bottom: 4px;
-    letter-spacing: -.01em;
-  }
-  .brand small { color: var(--text-mute); font-weight: 500; font-size: 12px; display: block; margin-top: 2px; }
-  .nav { list-style: none; padding: 0; margin: 14px 0 0; }
-  .nav li a {
-    display: block;
-    padding: 7px 10px;
-    border-radius: 6px;
-    color: var(--text);
-    font-size: 13.5px;
-    border: 1px solid transparent;
-  }
-  .nav li a:hover { background: var(--tag-bg); text-decoration: none; }
-  .nav li a.active { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+  .sidebar::-webkit-scrollbar { width: 6px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
 
-  /* Main */
-  main { padding: 28px clamp(16px, 4vw, 56px); max-width: 1100px; }
-  .page-head {
+  .sidebar-inner { padding: 24px 18px; }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 4px 14px;
     border-bottom: 1px solid var(--border);
-    padding-bottom: 18px;
-    margin-bottom: 24px;
+    margin-bottom: 14px;
   }
-  .page-head h1 {
-    margin: 0 0 6px;
-    font-size: clamp(22px, 3vw, 28px);
+  .brand-mark {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    display: grid; place-items: center;
+    color: #fff; font-weight: 800; font-size: 15px;
+    box-shadow: 0 6px 14px rgba(79,70,229,.35);
     letter-spacing: -.02em;
   }
-  .page-head p { color: var(--text-mute); margin: 0; font-size: 14px; }
+  .brand-text { line-height: 1.25; }
+  .brand-title { font-weight: 700; font-size: 14px; letter-spacing: -.02em; }
+  .brand-sub { color: var(--text-mute); font-weight: 500; font-size: 11.5px; margin-top: 1px; }
 
-  /* Search bar */
+  .nav-group { margin-bottom: 6px; }
+  .nav-group-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px 6px;
+    color: var(--text-mute);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .nav-group-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--grp-color, var(--text-faint));
+  }
+  .nav-group-count {
+    margin-left: auto;
+    color: var(--text-faint);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .nav { list-style: none; padding: 0; margin: 0; }
+  .nav a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px 7px 22px;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 13.2px;
+    font-weight: 500;
+    position: relative;
+    line-height: 1.45;
+  }
+  .nav a::before {
+    content: "";
+    position: absolute;
+    left: 11px; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 14px; border-radius: 2px;
+    background: transparent;
+  }
+  .nav a:hover { background: var(--bg-soft); text-decoration: none; }
+  .nav a.active {
+    background: var(--accent-soft);
+    color: var(--accent-text);
+  }
+  .nav a.active::before { background: var(--accent); }
+
+  /* Main */
+  main { padding: 32px clamp(18px, 4vw, 56px) 48px; max-width: 1100px; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    color: #fff;
+    padding: 28px 32px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 60%);
+    pointer-events: none;
+  }
+  .hero h1 {
+    margin: 0 0 6px;
+    font-size: clamp(22px, 3vw, 28px);
+    letter-spacing: -.025em;
+    font-weight: 800;
+  }
+  .hero p {
+    margin: 0;
+    color: rgba(255,255,255,.88);
+    font-size: 14px;
+  }
+  .hero-stats {
+    display: flex; gap: 18px; margin-top: 16px;
+    flex-wrap: wrap;
+    font-size: 12.5px;
+    color: rgba(255,255,255,.85);
+  }
+  .hero-stats span strong { color: #fff; font-weight: 700; }
+
+  /* Toolbar */
   .toolbar {
+    position: sticky;
+    top: 12px;
+    z-index: 20;
+    background: var(--bg);
+    padding: 10px 0 8px;
+    margin: 0 0 4px;
+  }
+  .toolbar-inner {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
-    margin: 18px 0 6px;
     align-items: center;
-  }
-  .search {
-    flex: 1 1 300px;
-    position: relative;
-  }
-  .search input {
-    width: 100%;
-    padding: 10px 14px 10px 38px;
+    background: var(--bg-elev);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    background: var(--bg-elev);
+    padding: 8px 10px;
+    box-shadow: var(--shadow-sm);
+  }
+  .search { flex: 1 1 280px; position: relative; }
+  .search input {
+    width: 100%;
+    padding: 10px 14px 10px 40px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: var(--bg-soft);
     color: var(--text);
     font-size: 14px;
+    font-family: inherit;
     outline: none;
-    transition: border-color .15s, box-shadow .15s;
+    transition: border-color .15s, box-shadow .15s, background .15s;
   }
   .search input:focus {
     border-color: var(--accent);
+    background: var(--bg-elev);
     box-shadow: 0 0 0 3px var(--accent-soft);
   }
-  .search::before {
-    content: "";
-    position: absolute;
-    left: 14px; top: 50%;
-    transform: translateY(-50%);
-    width: 14px; height: 14px;
-    border: 2px solid var(--text-mute);
-    border-radius: 50%;
+  .search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--text-faint);
+    pointer-events: none;
   }
-  .search::after {
-    content: "";
-    position: absolute;
-    left: 26px; top: 22px;
-    width: 8px; height: 2px;
-    background: var(--text-mute);
-    transform: rotate(45deg);
-  }
-  .meta {
+  .meta-info {
     color: var(--text-mute);
     font-size: 12.5px;
+    padding: 0 6px;
   }
+  .meta-info strong { color: var(--text); font-weight: 700; }
 
-  /* Tag chips (filter) */
+  /* Tag chips */
   .tagbar {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin: 12px 0 8px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+    padding: 12px 2px 4px;
+    margin-bottom: 6px;
   }
   .tag {
-    display: inline-block;
-    padding: 4px 10px;
+    display: inline-flex; align-items: center;
+    padding: 5px 11px;
     border-radius: 999px;
     background: var(--tag-bg);
     color: var(--tag-text);
     font-size: 12px;
+    font-weight: 500;
     border: 1px solid transparent;
     cursor: pointer;
     user-select: none;
-    transition: background .12s, color .12s;
+    transition: all .12s ease;
   }
-  .tag:hover { background: var(--accent-soft); color: var(--accent); }
-  .tag.active { background: var(--accent); color: #fff; }
+  .tag:hover { background: var(--accent-soft); color: var(--accent-text); }
+  .tag.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(79,70,229,.3);
+  }
   .tagbar .clear {
     margin-left: auto;
     background: transparent;
     border: 1px solid var(--border);
     color: var(--text-mute);
     cursor: pointer;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 999px;
     font-size: 12px;
+    font-family: inherit;
+    transition: all .12s;
   }
-  .tagbar .clear:hover { color: var(--text); }
+  .tagbar .clear:hover { color: var(--text); border-color: var(--border-strong); background: var(--bg-elev); }
+
+  /* Group divider */
+  .group-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 30px 0 12px;
+    padding: 0 4px;
+  }
+  .group-divider .gd-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--grp-color, var(--text-faint));
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--grp-color, var(--text-faint)) 18%, transparent);
+  }
+  .group-divider h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+  }
+  .group-divider .gd-count {
+    color: var(--text-faint);
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--bg-soft);
+    padding: 2px 9px;
+    border-radius: 999px;
+  }
+  .group-divider .gd-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border) 0%, transparent 100%);
+    margin-left: 6px;
+  }
 
   /* Sections */
   section.card {
     background: var(--bg-elev);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 22px 22px 18px;
-    margin: 16px 0;
-    box-shadow: var(--shadow);
-    scroll-margin-top: 16px;
+    border-radius: var(--radius);
+    padding: 22px 24px 18px;
+    margin: 12px 0;
+    box-shadow: var(--shadow-sm);
+    scroll-margin-top: 100px;
+    transition: box-shadow .2s, transform .15s, border-color .15s;
+    position: relative;
   }
-  section.card h2 {
-    margin: 0 0 4px;
-    font-size: 18px;
-    letter-spacing: -.01em;
+  section.card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
   }
+  section.card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 22px; bottom: 22px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--grp-color, var(--text-faint));
+    opacity: .8;
+  }
+  .card-head {
+    display: flex; align-items: flex-start; gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  section.card h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    flex: 1;
+    min-width: 0;
+  }
+  .badge {
+    display: inline-flex; align-items: center;
+    padding: 2px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+  .badge-중요 { background: var(--badge-중요-bg); color: var(--badge-중요-fg); }
+  .badge-주의 { background: var(--badge-주의-bg); color: var(--badge-주의-fg); }
+  .badge-참고 { background: var(--badge-참고-bg); color: var(--badge-참고-fg); }
+
   .crumb {
     color: var(--text-mute);
-    font-size: 12.5px;
-    font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12.2px;
+    font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
     margin-bottom: 10px;
+    word-break: break-all;
+    background: var(--bg-soft);
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: inline-block;
   }
   .desc {
     white-space: pre-wrap;
     color: var(--text);
     font-size: 14.5px;
-    background: var(--bg);
-    border: 1px solid var(--border);
+    line-height: 1.75;
+    background: var(--bg-soft);
+    border-left: 3px solid var(--grp-color, var(--border-strong));
     border-radius: 8px;
-    padding: 12px 14px;
+    padding: 14px 16px;
     margin: 10px 0 12px;
   }
   .images {
     display: grid;
     gap: 10px;
-    margin-top: 10px;
+    margin-top: 12px;
   }
   .images img {
     width: 100%;
     height: auto;
     border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg);
+    border-radius: 10px;
+    background: var(--bg-soft);
     cursor: zoom-in;
     display: block;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .images img:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
   }
   .section-tags {
-    display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 4px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin: 8px 0 4px;
   }
-  .section-tags .tag { cursor: pointer; }
+  .section-tags .tag { font-size: 11.5px; padding: 3px 9px; }
 
   .empty {
-    padding: 40px 16px;
+    padding: 60px 16px;
     text-align: center;
     color: var(--text-mute);
     border: 1px dashed var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius);
     margin-top: 20px;
+    background: var(--bg-elev);
   }
+  .empty-icon { font-size: 32px; margin-bottom: 8px; opacity: .6; }
 
   /* Lightbox */
   .lightbox {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,.86);
+    background: rgba(8,10,16,.92);
+    backdrop-filter: blur(4px);
     display: none;
     align-items: center; justify-content: center;
     z-index: 1000;
     padding: 24px;
     cursor: zoom-out;
+    animation: fadeIn .15s ease;
   }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   .lightbox.show { display: flex; }
   .lightbox img {
     max-width: 96vw;
     max-height: 92vh;
-    border-radius: 8px;
-    box-shadow: 0 8px 40px rgba(0,0,0,.6);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.7);
   }
+
+  /* Back to top */
+  .to-top {
+    position: fixed;
+    right: 22px; bottom: 22px;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(79,70,229,.4);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 30;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .to-top:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(79,70,229,.55); }
+  .to-top.show { display: flex; }
 
   /* Footer */
   footer {
     color: var(--text-mute);
-    font-size: 12px;
-    padding: 24px 0 8px;
+    font-size: 12.5px;
+    padding: 28px 4px 4px;
     border-top: 1px solid var(--border);
-    margin-top: 28px;
+    margin-top: 32px;
+    text-align: center;
+  }
+  footer .updated-tag {
+    display: inline-block;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 4px;
   }
 
-  /* Highlight match */
+  /* Highlight */
   mark {
-    background: #fde68a;
-    color: #1a1d24;
-    padding: 0 2px;
-    border-radius: 3px;
+    background: linear-gradient(transparent 60%, #fef08a 60%);
+    color: var(--text);
+    padding: 0 1px;
+    border-radius: 0;
   }
   @media (prefers-color-scheme: dark) {
-    mark { background: #facc15; color: #1a1d24; }
+    mark { background: linear-gradient(transparent 60%, rgba(250,204,21,.5) 60%); color: #fff; }
   }
 </style>
 </head>
@@ -287,61 +533,135 @@
   <aside class="sidebar">
     <div class="sidebar-inner">
       <div class="brand">
-        하나사인몰 매뉴얼
-        <small>신규몰 관리자 페이지</small>
+        <div class="brand-mark">하나</div>
+        <div class="brand-text">
+          <div class="brand-title">신규몰 매뉴얼</div>
+          <div class="brand-sub">Admin Manual</div>
+        </div>
       </div>
-      <ul class="nav" id="nav"></ul>
+      <div id="nav-tree"></div>
     </div>
   </aside>
 
   <main>
-    <div class="page-head">
+    <div class="hero">
       <h1>신규몰 관리자 페이지 매뉴얼</h1>
-      <p>운영 항목별로 빠르게 찾아 쓰는 가이드. 검색·태그 필터로 원하는 항목을 바로 찾으세요.</p>
+      <p>운영 항목별로 빠르게 찾는 가이드. 검색·태그 필터로 원하는 항목을 바로 찾으세요.</p>
+      <div class="hero-stats">
+        <span><strong id="hero-count">0</strong> 항목</span>
+        <span>·</span>
+        <span><strong id="hero-groups">0</strong> 카테고리</span>
+        <span>·</span>
+        <span>업데이트 <strong id="hero-updated">—</strong></span>
+      </div>
     </div>
 
     <div class="toolbar">
-      <div class="search">
-        <input id="q" type="text" placeholder="제목·내용·태그·경로 검색 (예: 팝업, 기획전, CateType)" autocomplete="off" />
+      <div class="toolbar-inner">
+        <div class="search">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="text" placeholder="제목·내용·태그·경로로 검색 (예: 팝업, 기획전, CCode)" autocomplete="off" />
+        </div>
+        <div class="meta-info"><strong id="count">0</strong> / <span id="total">0</span></div>
       </div>
-      <div class="meta" id="count"></div>
     </div>
 
     <div class="tagbar" id="tagbar"></div>
 
     <div id="sections"></div>
-    <div class="empty" id="empty" style="display:none;">검색 결과가 없습니다.</div>
+    <div class="empty" id="empty" style="display:none;">
+      <div class="empty-icon">🔍</div>
+      <div>검색 결과가 없습니다.</div>
+    </div>
 
     <footer>
-      <div>마지막 업데이트: <span id="updated"></span> · 총 <span id="total"></span>개 항목</div>
-      <div>업데이트는 엑셀 원본 변경 시 재생성됩니다.</div>
+      마지막 업데이트 <span class="updated-tag" id="updated"></span>
+      · 총 <span class="updated-tag" id="footer-total">0</span> 항목
+      <div style="margin-top:6px;color:var(--text-faint);font-size:11.5px;">엑셀 원본 변경 시 재생성</div>
     </footer>
   </main>
 </div>
 
+<button class="to-top" id="to-top" title="맨 위로" aria-label="맨 위로">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+</button>
+
 <div class="lightbox" id="lightbox"><img id="lightbox-img" alt="" /></div>
 
-<script id="data" type="application/json">{"updated": "2026-05-04", "sections": [{"id": "category-edit", "title": "카테고리 수정", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(상품)", "tags": ["카테고리", "메인관리", "분류", "정렬"], "desc": "메인 화면 카테고리 명칭/노출 순서를 수정합니다.", "images": ["image9.png"]}, {"id": "space-recommend", "title": "공간별 추천상품", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(상품)", "tags": ["공간별", "추천상품", "업종별", "CateType"], "desc": "공간별 추천상품은 업종별 화면에 노출됩니다. 검색 화면 이동 시 URL 세팅에 CateType 파라미터를 사용합니다.", "images": ["image6.png"]}, {"id": "image-register", "title": "이미지 등록", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(이미지)", "tags": ["이미지", "배너", "등록", "메인이미지"], "desc": "메인 배너/이미지를 등록·교체·정렬합니다.", "images": ["image31.png"]}, {"id": "popup-list", "title": "팝업창 리스트", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "팝업창", "리스트"], "desc": "전체 팝업창 목록을 관리합니다. 노출 순서가 화면 위치를 결정합니다.", "images": ["image13.png"]}, {"id": "popup-1", "title": "팝업창 — 노출순서 첫번째 상품", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "노출순서", "첫번째"], "desc": "노출순서 1번 팝업창 상품 등록 방법.", "images": ["image26.png"]}, {"id": "popup-2-3", "title": "팝업창 — 노출순서 두번째·세번째 상품", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "노출순서", "두번째", "세번째"], "desc": "노출순서 2번·3번 팝업창 상품 등록 방법.", "images": ["image18.png"]}, {"id": "popup-4-more", "title": "팝업창 — 노출순서 네번째 / 더보기 링크", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "노출순서", "네번째", "더보기", "링크", "CateType", "URL"], "desc": "CateType=1 → 상품별, CateType=2 → 업종별\n\n검색 화면으로 이동시킬 때, 공간별 추천상품은 업종별 화면에 있어서 URL 세팅 시 추가가 필요합니다.\n\n기존 검색 URL + &CateType=1\n예: /Search.php?GetSearch=화장실&CCode=02&CateCou=1&GsNumsSearch=&CateType=1\n\n업종별 검색화면을 보여줘야 하면:\n/Search.php?GetSearch=화장실&CCode=02&CateCou=1&GsNumsSearch=\n(CateType 파라미터 제외) 형태로 세팅합니다.", "images": ["image10.png"]}, {"id": "position-edit", "title": "위치 수정", "path": "관리자 페이지 > 상품전시/프로모션", "tags": ["위치", "수정", "정렬", "노출"], "desc": "전시 영역 위치/순서를 수정합니다.", "images": ["image24.png"]}, {"id": "biz-doc", "title": "사업자등록증·통장사본 등록", "path": "관리자 페이지 > 게시판/자료실 > 자료실", "tags": ["사업자등록증", "통장사본", "자료실", "게시판"], "desc": "거래용 사업자등록증·통장사본 파일을 자료실에 업로드합니다.", "images": ["image30.png", "image19.png", "image8.png"]}, {"id": "search-keyword", "title": "추천검색어 등록", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(상품) > 추천검색어", "tags": ["추천검색어", "검색어", "메인관리", "PC", "모바일"], "desc": "1. 관리자 페이지 상품전시/프로모션 → 메인관리(상품) → 제일 상단 '추천검색어' 버튼 클릭\n2. 타이틀 — 등록할 추천검색어 입력. 상품코드는 0으로 고정.\n3. 링크값 지정 — 신규몰 웹에서 검색 후 https://www.hanasignmall.kr 빼고 입력.\n   예: /Search.php?GetSearch=아파트게시판&CCode=01&CateCou=1&GsNumsSearch=\n4. 사용처 — PC / 모바일 / ALL 지정.\n5. 지정된 노출순서에 따라 노출됩니다.", "images": ["image23.png"]}, {"id": "category-option", "title": "카테고리 옵션 변경", "path": "관리자 페이지 > 상품관리 > 카테고리 관리", "tags": ["카테고리", "옵션", "변경", "수정"], "desc": "카테고리별 옵션값을 변경합니다.", "images": ["image14.png"]}, {"id": "promotion", "title": "기획전 설정", "path": "관리자 페이지 > 상품전시/프로모션 > 기획전 관리", "tags": ["기획전", "출력방식", "진열순서", "썸네일"], "desc": "■ 상품 출력방식\n  • 0 (기본값) : 한 줄에 상품 5개\n  • 1 : 한 줄에 상품 4개\n  • 2 : 왼쪽에 1개\n  • 3 : 오른쪽에 1개\n\n■ 진열순서\n  낮은 숫자부터 보여집니다.\n\n■ 기획전 모음 페이지\n  등록된 글(기획전)부터 노출됩니다. 기획전 썸네일 아래에 보여지는 상품은 해당 기획전 글 그룹1번 상품 4개가 노출됩니다.", "images": ["image4.png", "image7.png", "image2.png", "image12.png", "image28.png", "image15.png", "image27.png", "image22.png", "image20.png", "image11.png", "image1.png", "image25.png", "image5.png"]}, {"id": "promotion-collection-order", "title": "기획전 모음 순서 설정", "path": "관리자 페이지 > 상품전시/프로모션 > 기획전 관리", "tags": ["기획전", "모음", "순서", "정렬"], "desc": "기획전 모음 페이지 노출 순서를 설정합니다.", "images": ["image33.png", "image21.png"]}, {"id": "site-material", "title": "현장별 맞춤소재", "path": "관리자 페이지 > 상품전시/프로모션", "tags": ["현장별", "맞춤소재", "이벤트", "배너", "서브페이지"], "desc": "■ 초록색(소재) → 각 소재 상세페이지\n  관리자 페이지 상품전시/프로모션 → 이벤트 상품 등록 필요 및 링크 설정\n\n■ 파란색(상품) → 각 상품 상세페이지\n  관리자 페이지 상품전시/프로모션 → 메인 관리(상품) 현장별 맞춤소재 카테고리 설정 필요\n\n■ 더보기 → 현장별맞춤소재_서브페이지 화면으로 이동\n  배너 이미지 1개 고정 사용", "images": ["image16.png", "image32.png", "image34.png", "image29.png"]}, {"id": "edition", "title": "에디션 등록법", "path": "관리자 페이지 > 상품전시/프로모션", "tags": ["에디션", "등록", "페이지추가"], "desc": "에디션 페이지 추가가 필요할 경우 웹팀에 알려주세요. 등록 절차와 노출 영역 세팅이 함께 진행됩니다.", "images": ["image17.png"]}, {"id": "list-show-conditions", "title": "[중요] 상품 리스트 노출 공통조건", "path": "관리자 페이지 > 상품정보창", "tags": ["노출조건", "상품정보", "리스트", "공통조건", "필수"], "desc": "신규몰 모든 상품 리스트 공통조건 — 아래 조건 미충족 시 메인영역·카테고리 리스트·기획전 등 모든 리스트에서 노출되지 않습니다.\n\n■ 가격정보\n  • 판매 URL 'www.hanasignmall.kr' + 활성화(초록색 체크) 된 가격 최소 1개 등록 필수\n\n■ 카테고리\n  • 상품별 / 업종별 카테고리 중 최소 1개 등록 필수\n\n※ 옵션이 0개일 경우 상세페이지 구조상 정상작동하지 않으니 옵션 1개 이상 등록 필요", "images": []}, {"id": "price-call-only", "title": "가격 '전화상담 후 결정' 표시 방법", "path": "관리자 페이지 > 상품정보창 > 가격정보", "tags": ["가격", "전화상담", "0원"], "desc": "일반판매가를 0원으로 설정 후 활성화 처리 → 상세페이지에 '전화상담 후 결정'으로 노출됩니다.", "images": []}, {"id": "common-detail", "title": "공통상세정보 설정", "path": "관리자 > 임시/상품/디자인 관리 > 상품 정보관리 > 공통상세정보", "tags": ["공통상세정보", "상세페이지", "상단"], "desc": "판매중인 모든 상품 상세페이지 가장 상단에 공통으로 노출되는 상세정보(PC·모바일 동일 적용).\n\n경로: 상품 정보관리 → 검색조건 하단 '공통상세정보' 클릭 후 상세정보 영역 수정", "images": []}, {"id": "sales-count", "title": "상품 판매수 카운트 룰 (2025-03-31 이후 반영)", "path": "주문/결제 시스템", "tags": ["판매수", "카운트", "결제", "주문", "통계"], "desc": "■ 신용카드 / 계좌이체 / 간편결제\n  • 결제 성공 시 즉시 반영 (주문상태: 결제완료)\n\n■ 무통장 입금\n  • 관리자 페이지에서 담당자가 '결제완료'로 상태 변경 시 반영\n\n■ 가상계좌\n  • 구매자가 계좌로 입금 → 토스에서 성공 데이터 수신 → 서버에서 받았을 때 '결제완료'로 상태 변경 시 반영", "images": []}, {"id": "thumbnail-upload", "title": "상품 썸네일 업로드 — 용량·형식 제한", "path": "관리자 페이지 > 상품정보창 > 썸네일", "tags": ["썸네일", "이미지", "용량", "업로드", "확장자"], "desc": "■ 파일 형식\n  • 허용: jpg, png, gif\n  • 그 외 확장자 업로드 시 '허용되지 않는 파일입니다' 안내 팝업\n\n■ 용량\n  • 시스템 권장 용량: 약 600KB\n  • 초과 시 재첨부 안내 팝업 노출\n  • 원활한 등록을 위해 600KB 이하 이미지 사용 권장", "images": []}, {"id": "personal-payment", "title": "개인결제 상품 — 배송처리유형 예외", "path": "관리자 페이지 > 상품정보창", "tags": ["개인결제", "배송처리", "예외처리"], "desc": "개인결제 상품은 '배송처리유형'을 별도 설정하지 않고 사용 중.\n상품형태가 '일반상품'일 때만 배송처리유형 체크값이 없으면 팝업 노출되도록 수정됨.", "images": []}, {"id": "category-code", "title": "카테고리 코드표 (상품별 / 업종별)", "path": "관리자 > 카테고리/쿠폰 관리 > 카테고리 관리", "tags": ["카테고리", "코드", "상품별", "업종별", "CCode"], "desc": "■ 상품별 카테고리\n  01  게시판\n  02  안내판\n  04  입간판\n  05  현수막/배너\n  07  구조물\n  08  도로안전용품\n  09  각종물품\n  10  인쇄물/스티커\n  13  개인결제\n\n■ 업종별 카테고리\n  01  학교/학원\n  02  식당/카페\n  03  아파트\n  04  호텔/펜션\n  05  병원/요양시설\n  06  회사/공장\n  07  공공기관\n  08  헬스/레저\n  09  기타업종\n  12  개인결제창\n  14  전시/관람 (추가예정)", "images": []}, {"id": "category-name-image-option", "title": "카테고리 이름·이미지·옵션 변경", "path": "관리자 > 카테고리/쿠폰 관리 > 카테고리 관리", "tags": ["카테고리", "이름변경", "아이콘", "배너", "옵션", "Meta"], "desc": "■ 이름·이미지(아이콘/배너) 변경\n\n▸ 상품별\n  카테고리명 2번째 아이콘(펜모양) 클릭 → 이름 / Meta Title / Meta Description / Meta Keywords / 아이콘 이미지 / 배너 이미지(카테고리 리스트 상단) / 카테고리 상세내용(웹·모바일) 변경 가능\n  • 카테고리 상세내용 = 상세페이지 '공통상세정보' 하단에 노출되는 상세정보\n  • 중복 카테고리(1차·2차)일 때는 가장 처음 등록된 내용만 노출\n\n▸ 업종별\n  카테고리명 2번째 아이콘(펜모양) 클릭 → 이름 / 아이콘 이미지 / 배너 이미지 변경 가능\n\n■ 옵션 변경\n  카테고리명 '옵션등록' 버튼 클릭 후 수정", "images": []}, {"id": "promotion-product-display", "title": "기획전(이벤트상품) — 상품 등록·숨김·삭제·공개", "path": "관리자 페이지 > 상품전시/프로모션 > 이벤트상품 등록", "tags": ["기획전", "이벤트상품", "노출", "숨김", "삭제", "공개", "비공개"], "desc": "■ 1. 상품노출 설정\n  노출시킬 상품 체크 → '현카테고리에 등록' 클릭\n  • 이미 등록된 상품 중복등록 시 'n개가 처리되지 않았고, 나머지는 처리되었습니다.' 팝업\n\n■ 2. 상품숨김 설정\n  숨길 상품 체크 → '현카테고리에 숨김' 클릭\n  • 등록되지 않은 상품 숨김처리 시 동일 팝업\n\n■ 3. 상품 삭제\n  • 위치: 리스트 '디자인관리' 버튼 옆 '상품삭제' 버튼\n  • 삭제 방식: 현재 선택된 그룹에서만 삭제 (※ 복구 불가)\n  • 상품명 앞 'Category' 클릭 시 나오는 카테고리 리스트에서는 오클릭 방지를 위해 삭제(-) 기능 제외\n\n■ 상품공개 / 상품비공개\n  • 공개: 상품그룹 상관없이 해당 이벤트 페이지 모든 그룹에서 노출\n  • 비공개: 상품그룹 상관없이 해당 이벤트 페이지 모든 그룹에서 숨김\n\n예시) A상품을 그룹1·3 등록 후 그룹3만 숨기려면 → 상품Group3 상품전시추가창에서 A상품 숨김설정\n       A상품을 그룹 상관없이 모두 숨기려면 → Group1 또는 Group3 리스트에서 A상품 체크 후 '상품비공개' 클릭", "images": []}, {"id": "promotion-list-order", "title": "기획전 모음 — 노출순서 변경", "path": "관리자 > 상품전시/프로모션 > 기획전모음 [노출순서변경]", "tags": ["기획전", "기획전모음", "노출순서", "정렬"], "desc": "신규몰 메인 '공간별 안내판' 영역 아래 '기획전 더보기' 클릭 시 노출되는 기획전 모음 페이지의 정렬 순서 변경.\n\nURL: https://www.hanasignmall.kr/board/event_list.php", "images": []}, {"id": "notice-priority", "title": "공지사항 — 우선순위 노출 기능", "path": "관리자 > 게시판/자료실 > 공지사항 (등록/수정)", "tags": ["공지사항", "우선순위", "노출순서", "팝업"], "desc": "■ 노출 순서 설정\n  • 선택한 숫자가 클수록 우선적으로 상단에 노출 (기본값: 0)\n  • PC·모바일 모두 적용\n\n■ 관리자 공지사항 리스트 표시 조건\n  • 메인 팝업 노출 상태 + 게시 기간이 유효한 경우에만 노출 순서·위치 정보가 표시됨", "images": []}, {"id": "notice-end-date", "title": "공지사항 팝업 — 노출 종료 날짜", "path": "관리자 > 게시판/자료실 > 공지사항 (등록/수정)", "tags": ["공지사항", "팝업", "종료날짜", "자동종료"], "desc": "■ 입력날짜 = 게시물 등록 날짜\n\n■ 종료 날짜 동작\n  • 종료 날짜를 2025-12-31로 설정 시 → 2025-12-31까지 팝업 노출\n  • 2026-01-01 00:00부터 별도 수정 없이 자동 노출 종료\n\n■ 미선택 시\n  • 작성일 기준 7일 뒤로 자동 설정\n\n※ 등록/수정 화면에 노출 종료 날짜 항목 추가 예정", "images": []}, {"id": "notice-platform", "title": "공지사항 사용처 — PC / 모바일 / ALL", "path": "관리자 > 게시판/자료실 > 공지사항 > 사용처", "tags": ["공지사항", "PC", "모바일", "ALL", "사용처"], "desc": "■ ALL\n  • PC·모바일 메인 모두에서 팝업 노출\n  • 고객센터 > 공지사항 리스트 PC·모바일 공통 노출\n\n■ PC\n  • PC 카테고리 등록 공지는 PC에서만 팝업 노출\n  • 고객센터 > 공지사항에서 모바일용 공지는 제외\n\n■ 모바일\n  • 모바일 카테고리 등록 공지는 모바일에서만 팝업 노출\n  • 고객센터 > 공지사항에서 PC 카테고리는 제외\n\n■ 사용 가이드\n  • PC·모바일 동일 이미지 사용 → 'ALL'로 등록\n  • PC·모바일 다른 이미지 사용 → PC용 1개 + 모바일용 1개 (총 2개) 등록", "images": []}, {"id": "list-sort", "title": "상품 리스트 정렬 룰 (카테고리 / 이지서치 / 검색)", "path": "신규몰 웹·모바일", "tags": ["정렬", "카테고리리스트", "이지서치", "검색", "관심상품", "우선뷰"], "desc": "■ 카테고리 상품 리스트 — 기본값 '최대조회순'\n  비로그인: ① 최대조회순 → ② 상품전시 우선뷰 숫자 큰 순\n  로그인  : ① 최대조회순 → ② 상품전시 우선뷰 숫자 큰 순 → ③ 관심상품(마이페이지 > 회원정보관리 > 관심분야 체크)\n\n■ 이지서치 — 기본값 '신상품순' (검색어 없을 때)\n  비로그인: ① 신상품순 → ② 상품전시 우선뷰 숫자 큰 순\n  로그인  : ① 신상품순 → ② 상품전시 우선뷰 숫자 큰 순 → ③ 관심상품\n\n■ 검색 — 기본값 '정확도순' (검색엔진 영향)\n  비로그인: ① 정확도순 → ② 상품전시 우선뷰 숫자 큰 순\n  로그인  : ① 정확도순 → ② 상품전시 우선뷰 숫자 큰 순 → ③ 관심상품", "images": []}, {"id": "search-rule", "title": "상품 검색 — 매칭 기준", "path": "신규몰 웹·모바일 검색", "tags": ["검색", "상품코드", "검색키워드", "매칭"], "desc": "■ 숫자/코드 검색\n  • 상품코드 / 이전코드 / 대표상품코드 매칭\n\n■ 텍스트 검색\n  • 상품명 / 검색키워드 매칭", "images": []}, {"id": "detail-best", "title": "상세페이지 — 하단 베스트상품 노출 로직", "path": "신규몰 상세페이지", "tags": ["상세페이지", "베스트상품", "추천상품", "CCode", "URL"], "desc": "현재 상세페이지 하단 베스트상품은 '판매중 상품 + 최대조회순'으로 노출.\n\n■ 카테고리 데이터 출처\n  • 1개 상품이 1개 이상의 카테고리를 가질 수 있어, 상품정보가 아닌 '상세페이지 상품이미지 위 상품별/업종별 > 카테고리' 데이터를 사용\n  • 카테고리는 변동 가능한 데이터라 URL 주소 안의 데이터를 활용\n\n■ 예시\n  상품: '골프 우승 포맥스 피켓' (260304102932_4208)\n  상품별 카테고리: 안내판 / 인쇄물/스티커\n  메인 BEST 상품 클릭 시 URL 예: https://www.hanasignmall.kr/DisplayGoods.php?CCode=04&RgdCode=20800 → CCode=04 인식\n\n■ 주의\n  • 상품별/업종별 카테고리 외 숫자가 들어가면 베스트 상품 영역 미노출\n  • 신규몰 상품별 메인 '이달의 BEST' 2·3·4번째 상품처럼 직접 지정된 영역 외에는 자동 매칭 영향\n\n■ 고정/변동\n  • 고정: 정렬 = 상품 최대조회순\n  • 변동: 카테고리명 (URL 파라미터에 따라)", "images": []}]}</script>
+<script id="data" type="application/json">{"updated": "2026-05-04", "sections": [{"id": "list-show-conditions", "title": "[중요] 상품 리스트 노출 공통조건", "path": "관리자 페이지 > 상품정보창", "tags": ["노출조건", "상품정보", "리스트", "공통조건", "필수"], "desc": "신규몰 모든 상품 리스트 공통조건 — 아래 조건 미충족 시 메인영역·카테고리 리스트·기획전 등 모든 리스트에서 노출되지 않습니다.\n\n■ 가격정보\n  • 판매 URL 'www.hanasignmall.kr' + 활성화(초록색 체크) 된 가격 최소 1개 등록 필수\n\n■ 카테고리\n  • 상품별 / 업종별 카테고리 중 최소 1개 등록 필수\n\n※ 옵션이 0개일 경우 상세페이지 구조상 정상작동하지 않으니 옵션 1개 이상 등록 필요", "images": [], "group": "운영 룰", "badge": "중요"}, {"id": "price-call-only", "title": "가격 '전화상담 후 결정' 표시 방법", "path": "관리자 페이지 > 상품정보창 > 가격정보", "tags": ["가격", "전화상담", "0원"], "desc": "일반판매가를 0원으로 설정 후 활성화 처리 → 상세페이지에 '전화상담 후 결정'으로 노출됩니다.", "images": [], "group": "운영 룰"}, {"id": "common-detail", "title": "공통상세정보 설정", "path": "관리자 > 임시/상품/디자인 관리 > 상품 정보관리 > 공통상세정보", "tags": ["공통상세정보", "상세페이지", "상단"], "desc": "판매중인 모든 상품 상세페이지 가장 상단에 공통으로 노출되는 상세정보(PC·모바일 동일 적용).\n\n경로: 상품 정보관리 → 검색조건 하단 '공통상세정보' 클릭 후 상세정보 영역 수정", "images": [], "group": "운영 룰"}, {"id": "sales-count", "title": "상품 판매수 카운트 룰 (2025-03-31 이후 반영)", "path": "주문/결제 시스템", "tags": ["판매수", "카운트", "결제", "주문", "통계"], "desc": "■ 신용카드 / 계좌이체 / 간편결제\n  • 결제 성공 시 즉시 반영 (주문상태: 결제완료)\n\n■ 무통장 입금\n  • 관리자 페이지에서 담당자가 '결제완료'로 상태 변경 시 반영\n\n■ 가상계좌\n  • 구매자가 계좌로 입금 → 토스에서 성공 데이터 수신 → 서버에서 받았을 때 '결제완료'로 상태 변경 시 반영", "images": [], "group": "운영 룰", "badge": "중요"}, {"id": "thumbnail-upload", "title": "상품 썸네일 업로드 — 용량·형식 제한", "path": "관리자 페이지 > 상품정보창 > 썸네일", "tags": ["썸네일", "이미지", "용량", "업로드", "확장자"], "desc": "■ 파일 형식\n  • 허용: jpg, png, gif\n  • 그 외 확장자 업로드 시 '허용되지 않는 파일입니다' 안내 팝업\n\n■ 용량\n  • 시스템 권장 용량: 약 600KB\n  • 초과 시 재첨부 안내 팝업 노출\n  • 원활한 등록을 위해 600KB 이하 이미지 사용 권장", "images": [], "group": "운영 룰", "badge": "주의"}, {"id": "personal-payment", "title": "개인결제 상품 — 배송처리유형 예외", "path": "관리자 페이지 > 상품정보창", "tags": ["개인결제", "배송처리", "예외처리"], "desc": "개인결제 상품은 '배송처리유형'을 별도 설정하지 않고 사용 중.\n상품형태가 '일반상품'일 때만 배송처리유형 체크값이 없으면 팝업 노출되도록 수정됨.", "images": [], "group": "운영 룰"}, {"id": "category-edit", "title": "카테고리 수정", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(상품)", "tags": ["카테고리", "메인관리", "분류", "정렬"], "desc": "메인 화면 카테고리 명칭/노출 순서를 수정합니다.", "images": ["image9.png"], "group": "카테고리"}, {"id": "category-option", "title": "카테고리 옵션 변경", "path": "관리자 페이지 > 상품관리 > 카테고리 관리", "tags": ["카테고리", "옵션", "변경", "수정"], "desc": "카테고리별 옵션값을 변경합니다.", "images": ["image14.png"], "group": "카테고리"}, {"id": "category-code", "title": "카테고리 코드표 (상품별 / 업종별)", "path": "관리자 > 카테고리/쿠폰 관리 > 카테고리 관리", "tags": ["카테고리", "코드", "상품별", "업종별", "CCode"], "desc": "■ 상품별 카테고리\n  01  게시판\n  02  안내판\n  04  입간판\n  05  현수막/배너\n  07  구조물\n  08  도로안전용품\n  09  각종물품\n  10  인쇄물/스티커\n  13  개인결제\n\n■ 업종별 카테고리\n  01  학교/학원\n  02  식당/카페\n  03  아파트\n  04  호텔/펜션\n  05  병원/요양시설\n  06  회사/공장\n  07  공공기관\n  08  헬스/레저\n  09  기타업종\n  12  개인결제창\n  14  전시/관람 (추가예정)", "images": [], "group": "카테고리", "badge": "참고"}, {"id": "category-name-image-option", "title": "카테고리 이름·이미지·옵션 변경", "path": "관리자 > 카테고리/쿠폰 관리 > 카테고리 관리", "tags": ["카테고리", "이름변경", "아이콘", "배너", "옵션", "Meta"], "desc": "■ 이름·이미지(아이콘/배너) 변경\n\n▸ 상품별\n  카테고리명 2번째 아이콘(펜모양) 클릭 → 이름 / Meta Title / Meta Description / Meta Keywords / 아이콘 이미지 / 배너 이미지(카테고리 리스트 상단) / 카테고리 상세내용(웹·모바일) 변경 가능\n  • 카테고리 상세내용 = 상세페이지 '공통상세정보' 하단에 노출되는 상세정보\n  • 중복 카테고리(1차·2차)일 때는 가장 처음 등록된 내용만 노출\n\n▸ 업종별\n  카테고리명 2번째 아이콘(펜모양) 클릭 → 이름 / 아이콘 이미지 / 배너 이미지 변경 가능\n\n■ 옵션 변경\n  카테고리명 '옵션등록' 버튼 클릭 후 수정", "images": [], "group": "카테고리"}, {"id": "space-recommend", "title": "공간별 추천상품", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(상품)", "tags": ["공간별", "추천상품", "업종별", "CateType"], "desc": "공간별 추천상품은 업종별 화면에 노출됩니다. 검색 화면 이동 시 URL 세팅에 CateType 파라미터를 사용합니다.", "images": ["image6.png"], "group": "메인 · 배너 · 추천"}, {"id": "image-register", "title": "이미지 등록", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(이미지)", "tags": ["이미지", "배너", "등록", "메인이미지"], "desc": "메인 배너/이미지를 등록·교체·정렬합니다.", "images": ["image31.png"], "group": "메인 · 배너 · 추천"}, {"id": "position-edit", "title": "위치 수정", "path": "관리자 페이지 > 상품전시/프로모션", "tags": ["위치", "수정", "정렬", "노출"], "desc": "전시 영역 위치/순서를 수정합니다.", "images": ["image24.png"], "group": "메인 · 배너 · 추천"}, {"id": "search-keyword", "title": "추천검색어 등록", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(상품) > 추천검색어", "tags": ["추천검색어", "검색어", "메인관리", "PC", "모바일"], "desc": "1. 관리자 페이지 상품전시/프로모션 → 메인관리(상품) → 제일 상단 '추천검색어' 버튼 클릭\n2. 타이틀 — 등록할 추천검색어 입력. 상품코드는 0으로 고정.\n3. 링크값 지정 — 신규몰 웹에서 검색 후 https://www.hanasignmall.kr 빼고 입력.\n   예: /Search.php?GetSearch=아파트게시판&CCode=01&CateCou=1&GsNumsSearch=\n4. 사용처 — PC / 모바일 / ALL 지정.\n5. 지정된 노출순서에 따라 노출됩니다.", "images": ["image23.png"], "group": "메인 · 배너 · 추천"}, {"id": "site-material", "title": "현장별 맞춤소재", "path": "관리자 페이지 > 상품전시/프로모션", "tags": ["현장별", "맞춤소재", "이벤트", "배너", "서브페이지"], "desc": "■ 초록색(소재) → 각 소재 상세페이지\n  관리자 페이지 상품전시/프로모션 → 이벤트 상품 등록 필요 및 링크 설정\n\n■ 파란색(상품) → 각 상품 상세페이지\n  관리자 페이지 상품전시/프로모션 → 메인 관리(상품) 현장별 맞춤소재 카테고리 설정 필요\n\n■ 더보기 → 현장별맞춤소재_서브페이지 화면으로 이동\n  배너 이미지 1개 고정 사용", "images": ["image16.png", "image32.png", "image34.png", "image29.png"], "group": "메인 · 배너 · 추천"}, {"id": "popup-list", "title": "팝업창 리스트", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "팝업창", "리스트"], "desc": "전체 팝업창 목록을 관리합니다. 노출 순서가 화면 위치를 결정합니다.", "images": ["image13.png"], "group": "팝업창"}, {"id": "popup-1", "title": "팝업창 — 노출순서 첫번째 상품", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "노출순서", "첫번째"], "desc": "노출순서 1번 팝업창 상품 등록 방법.", "images": ["image26.png"], "group": "팝업창"}, {"id": "popup-2-3", "title": "팝업창 — 노출순서 두번째·세번째 상품", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "노출순서", "두번째", "세번째"], "desc": "노출순서 2번·3번 팝업창 상품 등록 방법.", "images": ["image18.png"], "group": "팝업창"}, {"id": "popup-4-more", "title": "팝업창 — 노출순서 네번째 / 더보기 링크", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "노출순서", "네번째", "더보기", "링크", "CateType", "URL"], "desc": "CateType=1 → 상품별, CateType=2 → 업종별\n\n검색 화면으로 이동시킬 때, 공간별 추천상품은 업종별 화면에 있어서 URL 세팅 시 추가가 필요합니다.\n\n기존 검색 URL + &CateType=1\n예: /Search.php?GetSearch=화장실&CCode=02&CateCou=1&GsNumsSearch=&CateType=1\n\n업종별 검색화면을 보여줘야 하면:\n/Search.php?GetSearch=화장실&CCode=02&CateCou=1&GsNumsSearch=\n(CateType 파라미터 제외) 형태로 세팅합니다.", "images": ["image10.png"], "group": "팝업창"}, {"id": "promotion", "title": "기획전 설정", "path": "관리자 페이지 > 상품전시/프로모션 > 기획전 관리", "tags": ["기획전", "출력방식", "진열순서", "썸네일"], "desc": "■ 상품 출력방식\n  • 0 (기본값) : 한 줄에 상품 5개\n  • 1 : 한 줄에 상품 4개\n  • 2 : 왼쪽에 1개\n  • 3 : 오른쪽에 1개\n\n■ 진열순서\n  낮은 숫자부터 보여집니다.\n\n■ 기획전 모음 페이지\n  등록된 글(기획전)부터 노출됩니다. 기획전 썸네일 아래에 보여지는 상품은 해당 기획전 글 그룹1번 상품 4개가 노출됩니다.", "images": ["image4.png", "image7.png", "image2.png", "image12.png", "image28.png", "image15.png", "image27.png", "image22.png", "image20.png", "image11.png", "image1.png", "image25.png", "image5.png"], "group": "기획전"}, {"id": "promotion-collection-order", "title": "기획전 모음 순서 설정", "path": "관리자 페이지 > 상품전시/프로모션 > 기획전 관리", "tags": ["기획전", "모음", "순서", "정렬"], "desc": "기획전 모음 페이지 노출 순서를 설정합니다.", "images": ["image33.png", "image21.png"], "group": "기획전"}, {"id": "promotion-product-display", "title": "기획전(이벤트상품) — 상품 등록·숨김·삭제·공개", "path": "관리자 페이지 > 상품전시/프로모션 > 이벤트상품 등록", "tags": ["기획전", "이벤트상품", "노출", "숨김", "삭제", "공개", "비공개"], "desc": "■ 1. 상품노출 설정\n  노출시킬 상품 체크 → '현카테고리에 등록' 클릭\n  • 이미 등록된 상품 중복등록 시 'n개가 처리되지 않았고, 나머지는 처리되었습니다.' 팝업\n\n■ 2. 상품숨김 설정\n  숨길 상품 체크 → '현카테고리에 숨김' 클릭\n  • 등록되지 않은 상품 숨김처리 시 동일 팝업\n\n■ 3. 상품 삭제\n  • 위치: 리스트 '디자인관리' 버튼 옆 '상품삭제' 버튼\n  • 삭제 방식: 현재 선택된 그룹에서만 삭제 (※ 복구 불가)\n  • 상품명 앞 'Category' 클릭 시 나오는 카테고리 리스트에서는 오클릭 방지를 위해 삭제(-) 기능 제외\n\n■ 상품공개 / 상품비공개\n  • 공개: 상품그룹 상관없이 해당 이벤트 페이지 모든 그룹에서 노출\n  • 비공개: 상품그룹 상관없이 해당 이벤트 페이지 모든 그룹에서 숨김\n\n예시) A상품을 그룹1·3 등록 후 그룹3만 숨기려면 → 상품Group3 상품전시추가창에서 A상품 숨김설정\n       A상품을 그룹 상관없이 모두 숨기려면 → Group1 또는 Group3 리스트에서 A상품 체크 후 '상품비공개' 클릭", "images": [], "group": "기획전"}, {"id": "promotion-list-order", "title": "기획전 모음 — 노출순서 변경", "path": "관리자 > 상품전시/프로모션 > 기획전모음 [노출순서변경]", "tags": ["기획전", "기획전모음", "노출순서", "정렬"], "desc": "신규몰 메인 '공간별 안내판' 영역 아래 '기획전 더보기' 클릭 시 노출되는 기획전 모음 페이지의 정렬 순서 변경.\n\nURL: https://www.hanasignmall.kr/board/event_list.php", "images": [], "group": "기획전"}, {"id": "notice-priority", "title": "공지사항 — 우선순위 노출 기능", "path": "관리자 > 게시판/자료실 > 공지사항 (등록/수정)", "tags": ["공지사항", "우선순위", "노출순서", "팝업"], "desc": "■ 노출 순서 설정\n  • 선택한 숫자가 클수록 우선적으로 상단에 노출 (기본값: 0)\n  • PC·모바일 모두 적용\n\n■ 관리자 공지사항 리스트 표시 조건\n  • 메인 팝업 노출 상태 + 게시 기간이 유효한 경우에만 노출 순서·위치 정보가 표시됨", "images": [], "group": "공지사항"}, {"id": "notice-end-date", "title": "공지사항 팝업 — 노출 종료 날짜", "path": "관리자 > 게시판/자료실 > 공지사항 (등록/수정)", "tags": ["공지사항", "팝업", "종료날짜", "자동종료"], "desc": "■ 입력날짜 = 게시물 등록 날짜\n\n■ 종료 날짜 동작\n  • 종료 날짜를 2025-12-31로 설정 시 → 2025-12-31까지 팝업 노출\n  • 2026-01-01 00:00부터 별도 수정 없이 자동 노출 종료\n\n■ 미선택 시\n  • 작성일 기준 7일 뒤로 자동 설정\n\n※ 등록/수정 화면에 노출 종료 날짜 항목 추가 예정", "images": [], "group": "공지사항"}, {"id": "notice-platform", "title": "공지사항 사용처 — PC / 모바일 / ALL", "path": "관리자 > 게시판/자료실 > 공지사항 > 사용처", "tags": ["공지사항", "PC", "모바일", "ALL", "사용처"], "desc": "■ ALL\n  • PC·모바일 메인 모두에서 팝업 노출\n  • 고객센터 > 공지사항 리스트 PC·모바일 공통 노출\n\n■ PC\n  • PC 카테고리 등록 공지는 PC에서만 팝업 노출\n  • 고객센터 > 공지사항에서 모바일용 공지는 제외\n\n■ 모바일\n  • 모바일 카테고리 등록 공지는 모바일에서만 팝업 노출\n  • 고객센터 > 공지사항에서 PC 카테고리는 제외\n\n■ 사용 가이드\n  • PC·모바일 동일 이미지 사용 → 'ALL'로 등록\n  • PC·모바일 다른 이미지 사용 → PC용 1개 + 모바일용 1개 (총 2개) 등록", "images": [], "group": "공지사항"}, {"id": "biz-doc", "title": "사업자등록증·통장사본 등록", "path": "관리자 페이지 > 게시판/자료실 > 자료실", "tags": ["사업자등록증", "통장사본", "자료실", "게시판"], "desc": "거래용 사업자등록증·통장사본 파일을 자료실에 업로드합니다.", "images": ["image30.png", "image19.png", "image8.png"], "group": "자료실"}, {"id": "list-sort", "title": "상품 리스트 정렬 룰 (카테고리 / 이지서치 / 검색)", "path": "신규몰 웹·모바일", "tags": ["정렬", "카테고리리스트", "이지서치", "검색", "관심상품", "우선뷰"], "desc": "■ 카테고리 상품 리스트 — 기본값 '최대조회순'\n  비로그인: ① 최대조회순 → ② 상품전시 우선뷰 숫자 큰 순\n  로그인  : ① 최대조회순 → ② 상품전시 우선뷰 숫자 큰 순 → ③ 관심상품(마이페이지 > 회원정보관리 > 관심분야 체크)\n\n■ 이지서치 — 기본값 '신상품순' (검색어 없을 때)\n  비로그인: ① 신상품순 → ② 상품전시 우선뷰 숫자 큰 순\n  로그인  : ① 신상품순 → ② 상품전시 우선뷰 숫자 큰 순 → ③ 관심상품\n\n■ 검색 — 기본값 '정확도순' (검색엔진 영향)\n  비로그인: ① 정확도순 → ② 상품전시 우선뷰 숫자 큰 순\n  로그인  : ① 정확도순 → ② 상품전시 우선뷰 숫자 큰 순 → ③ 관심상품", "images": [], "group": "검색 · 정렬"}, {"id": "search-rule", "title": "상품 검색 — 매칭 기준", "path": "신규몰 웹·모바일 검색", "tags": ["검색", "상품코드", "검색키워드", "매칭"], "desc": "■ 숫자/코드 검색\n  • 상품코드 / 이전코드 / 대표상품코드 매칭\n\n■ 텍스트 검색\n  • 상품명 / 검색키워드 매칭", "images": [], "group": "검색 · 정렬"}, {"id": "detail-best", "title": "상세페이지 — 하단 베스트상품 노출 로직", "path": "신규몰 상세페이지", "tags": ["상세페이지", "베스트상품", "추천상품", "CCode", "URL"], "desc": "현재 상세페이지 하단 베스트상품은 '판매중 상품 + 최대조회순'으로 노출.\n\n■ 카테고리 데이터 출처\n  • 1개 상품이 1개 이상의 카테고리를 가질 수 있어, 상품정보가 아닌 '상세페이지 상품이미지 위 상품별/업종별 > 카테고리' 데이터를 사용\n  • 카테고리는 변동 가능한 데이터라 URL 주소 안의 데이터를 활용\n\n■ 예시\n  상품: '골프 우승 포맥스 피켓' (260304102932_4208)\n  상품별 카테고리: 안내판 / 인쇄물/스티커\n  메인 BEST 상품 클릭 시 URL 예: https://www.hanasignmall.kr/DisplayGoods.php?CCode=04&RgdCode=20800 → CCode=04 인식\n\n■ 주의\n  • 상품별/업종별 카테고리 외 숫자가 들어가면 베스트 상품 영역 미노출\n  • 신규몰 상품별 메인 '이달의 BEST' 2·3·4번째 상품처럼 직접 지정된 영역 외에는 자동 매칭 영향\n\n■ 고정/변동\n  • 고정: 정렬 = 상품 최대조회순\n  • 변동: 카테고리명 (URL 파라미터에 따라)", "images": [], "group": "상세페이지", "badge": "참고"}, {"id": "edition", "title": "에디션 등록법", "path": "관리자 페이지 > 상품전시/프로모션", "tags": ["에디션", "등록", "페이지추가"], "desc": "에디션 페이지 추가가 필요할 경우 웹팀에 알려주세요. 등록 절차와 노출 영역 세팅이 함께 진행됩니다.", "images": ["image17.png"], "group": "기타"}]}</script>
 <script>
 (function(){
   const data = JSON.parse(document.getElementById('data').textContent);
+  const sections = data.sections;
+
+  // Group color mapping
+  const groupColor = {
+    '운영 룰': 'var(--grp-운영룰)',
+    '카테고리': 'var(--grp-카테고리)',
+    '메인 · 배너 · 추천': 'var(--grp-메인)',
+    '팝업창': 'var(--grp-팝업창)',
+    '기획전': 'var(--grp-기획전)',
+    '공지사항': 'var(--grp-공지사항)',
+    '자료실': 'var(--grp-자료실)',
+    '검색 · 정렬': 'var(--grp-검색정렬)',
+    '상세페이지': 'var(--grp-상세페이지)',
+    '기타': 'var(--grp-기타)',
+  };
+  const groupOrder = ['운영 룰','카테고리','메인 · 배너 · 추천','팝업창','기획전','공지사항','자료실','검색 · 정렬','상세페이지','기타'];
+
+  // Group sections
+  const groups = {};
+  sections.forEach(s => {
+    const g = s.group || '기타';
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(s);
+  });
+
+  const navEl = document.getElementById('nav-tree');
   const sectionsEl = document.getElementById('sections');
-  const navEl = document.getElementById('nav');
   const tagbarEl = document.getElementById('tagbar');
   const qEl = document.getElementById('q');
   const countEl = document.getElementById('count');
-  const emptyEl = document.getElementById('empty');
-  const updatedEl = document.getElementById('updated');
   const totalEl = document.getElementById('total');
+  const emptyEl = document.getElementById('empty');
+  const heroCount = document.getElementById('hero-count');
+  const heroGroups = document.getElementById('hero-groups');
+  const heroUpdated = document.getElementById('hero-updated');
+  const updatedEl = document.getElementById('updated');
+  const footerTotal = document.getElementById('footer-total');
   const lb = document.getElementById('lightbox');
   const lbImg = document.getElementById('lightbox-img');
+  const toTop = document.getElementById('to-top');
 
-  // collect tags
+  // --- Build nav tree ---
+  groupOrder.forEach(g => {
+    if (!groups[g]) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'nav-group';
+    const head = document.createElement('div');
+    head.className = 'nav-group-head';
+    head.style.setProperty('--grp-color', groupColor[g]);
+    head.innerHTML = `<span class="nav-group-dot"></span><span>${g}</span><span class="nav-group-count">${groups[g].length}</span>`;
+    wrap.appendChild(head);
+    const ul = document.createElement('ul');
+    ul.className = 'nav';
+    groups[g].forEach(s => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#' + s.id;
+      a.textContent = s.title;
+      a.dataset.id = s.id;
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    wrap.appendChild(ul);
+    navEl.appendChild(wrap);
+  });
+
+  // --- Tag bar (collect unique tags) ---
   const tagSet = new Set();
-  data.sections.forEach(s => s.tags.forEach(t => tagSet.add(t)));
+  sections.forEach(s => s.tags.forEach(t => tagSet.add(t)));
   const allTags = Array.from(tagSet).sort();
-
-  // build tagbar
   const activeTags = new Set();
   allTags.forEach(t => {
     const el = document.createElement('span');
@@ -366,81 +686,100 @@
   });
   tagbarEl.appendChild(clearBtn);
 
-  // build nav
-  data.sections.forEach(s => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = '#' + s.id;
-    a.textContent = s.title;
-    a.dataset.id = s.id;
-    li.appendChild(a);
-    navEl.appendChild(li);
-  });
+  // --- Build sections (grouped) ---
+  groupOrder.forEach(g => {
+    if (!groups[g]) return;
+    const divider = document.createElement('div');
+    divider.className = 'group-divider';
+    divider.dataset.group = g;
+    divider.style.setProperty('--grp-color', groupColor[g]);
+    divider.innerHTML = `<span class="gd-dot"></span><h2>${g}</h2><span class="gd-count">${groups[g].length}</span><span class="gd-line"></span>`;
+    sectionsEl.appendChild(divider);
 
-  // build sections
-  data.sections.forEach(s => {
-    const card = document.createElement('section');
-    card.className = 'card';
-    card.id = s.id;
-    card.dataset.title = s.title;
-    card.dataset.tags = s.tags.join(',');
-    card.dataset.path = s.path;
-    card.dataset.desc = s.desc;
+    groups[g].forEach(s => {
+      const card = document.createElement('section');
+      card.className = 'card';
+      card.id = s.id;
+      card.dataset.title = s.title;
+      card.dataset.tags = s.tags.join(',');
+      card.dataset.path = s.path;
+      card.dataset.desc = s.desc;
+      card.dataset.group = g;
+      card.style.setProperty('--grp-color', groupColor[g]);
 
-    const h2 = document.createElement('h2');
-    h2.textContent = s.title;
-    card.appendChild(h2);
+      const head = document.createElement('div');
+      head.className = 'card-head';
+      const h3 = document.createElement('h3');
+      h3.textContent = s.title;
+      head.appendChild(h3);
+      if (s.badge) {
+        const b = document.createElement('span');
+        b.className = 'badge badge-' + s.badge;
+        b.textContent = s.badge;
+        head.appendChild(b);
+      }
+      card.appendChild(head);
 
-    const cr = document.createElement('div');
-    cr.className = 'crumb';
-    cr.textContent = s.path;
-    card.appendChild(cr);
+      const cr = document.createElement('div');
+      cr.className = 'crumb';
+      cr.textContent = s.path;
+      card.appendChild(cr);
 
-    const tags = document.createElement('div');
-    tags.className = 'section-tags';
-    s.tags.forEach(t => {
-      const tg = document.createElement('span');
-      tg.className = 'tag';
-      tg.textContent = '#' + t;
-      tg.addEventListener('click', () => {
-        if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
-        document.querySelectorAll('.tagbar .tag').forEach(e => {
-          if (e.dataset.tag === t) e.classList.toggle('active');
+      const tags = document.createElement('div');
+      tags.className = 'section-tags';
+      s.tags.forEach(t => {
+        const tg = document.createElement('span');
+        tg.className = 'tag';
+        tg.textContent = '#' + t;
+        tg.addEventListener('click', () => {
+          if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
+          document.querySelectorAll('.tagbar .tag').forEach(e => {
+            if (e.dataset.tag === t) e.classList.toggle('active');
+          });
+          render();
+          window.scrollTo({top: 0, behavior: 'smooth'});
         });
-        render();
-        window.scrollTo({top: 0, behavior: 'smooth'});
+        tags.appendChild(tg);
       });
-      tags.appendChild(tg);
+      card.appendChild(tags);
+
+      const desc = document.createElement('div');
+      desc.className = 'desc';
+      desc.textContent = s.desc;
+      card.appendChild(desc);
+
+      if (s.images && s.images.length) {
+        const imgs = document.createElement('div');
+        imgs.className = 'images';
+        s.images.forEach(src => {
+          const im = document.createElement('img');
+          im.src = 'images/' + src;
+          im.alt = s.title;
+          im.loading = 'lazy';
+          im.addEventListener('click', () => {
+            lbImg.src = im.src;
+            lb.classList.add('show');
+          });
+          imgs.appendChild(im);
+        });
+        card.appendChild(imgs);
+      }
+
+      sectionsEl.appendChild(card);
     });
-    card.appendChild(tags);
-
-    const desc = document.createElement('div');
-    desc.className = 'desc';
-    desc.textContent = s.desc;
-    card.appendChild(desc);
-
-    if (s.images && s.images.length) {
-      const imgs = document.createElement('div');
-      imgs.className = 'images';
-      s.images.forEach(src => {
-        const im = document.createElement('img');
-        im.src = 'images/' + src;
-        im.alt = s.title;
-        im.loading = 'lazy';
-        im.addEventListener('click', () => {
-          lbImg.src = im.src;
-          lb.classList.add('show');
-        });
-        imgs.appendChild(im);
-      });
-      card.appendChild(imgs);
-    }
-
-    sectionsEl.appendChild(card);
   });
 
+  // Lightbox
   lb.addEventListener('click', () => lb.classList.remove('show'));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('show'); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (lb.classList.contains('show')) lb.classList.remove('show');
+      else if (document.activeElement === qEl) { qEl.value = ''; render(); }
+    }
+    if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault(); qEl.focus(); qEl.select();
+    }
+  });
 
   function escapeReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
   function highlight(el, text, q) {
@@ -453,6 +792,8 @@
     const q = qEl.value.trim();
     const lq = q.toLowerCase();
     let visible = 0;
+    const visibleByGroup = {};
+
     document.querySelectorAll('section.card').forEach(card => {
       const title = card.dataset.title;
       const tags = card.dataset.tags;
@@ -463,40 +804,61 @@
       const matchTags = activeTags.size === 0 || Array.from(activeTags).every(t => tags.split(',').includes(t));
       const show = matchQ && matchTags;
       card.style.display = show ? '' : 'none';
-      if (show) visible++;
-      // highlight
       if (show) {
-        highlight(card.querySelector('h2'), title, q);
+        visible++;
+        const g = card.dataset.group;
+        visibleByGroup[g] = (visibleByGroup[g] || 0) + 1;
+        highlight(card.querySelector('h3'), title, q);
         highlight(card.querySelector('.desc'), desc, q);
       }
     });
-    countEl.textContent = visible + ' / ' + data.sections.length + ' 항목';
+
+    // Hide group dividers with no visible cards
+    document.querySelectorAll('.group-divider').forEach(gd => {
+      const g = gd.dataset.group;
+      gd.style.display = visibleByGroup[g] ? '' : 'none';
+    });
+
+    countEl.textContent = visible;
     emptyEl.style.display = visible === 0 ? '' : 'none';
-    // nav active filter visual
+
+    // Dim nav for filtered out items
     const visibleIds = new Set();
     document.querySelectorAll('section.card').forEach(c => { if (c.style.display !== 'none') visibleIds.add(c.id); });
-    document.querySelectorAll('#nav a').forEach(a => {
-      a.style.opacity = visibleIds.has(a.dataset.id) ? '1' : '0.35';
+    document.querySelectorAll('#nav-tree a').forEach(a => {
+      a.style.opacity = visibleIds.has(a.dataset.id) ? '1' : '0.32';
     });
   }
 
   qEl.addEventListener('input', render);
-  qEl.addEventListener('keydown', e => { if (e.key === 'Escape') { qEl.value = ''; render(); }});
 
-  // scrollspy active
+  // Scrollspy
   const obs = new IntersectionObserver(entries => {
     entries.forEach(en => {
       if (en.isIntersecting) {
-        document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('active', a.dataset.id === en.target.id));
+        document.querySelectorAll('#nav-tree a').forEach(a => a.classList.toggle('active', a.dataset.id === en.target.id));
       }
     });
   }, { rootMargin: '-30% 0px -60% 0px' });
   document.querySelectorAll('section.card').forEach(c => obs.observe(c));
 
+  // Back to top
+  window.addEventListener('scroll', () => {
+    toTop.classList.toggle('show', window.scrollY > 400);
+  });
+  toTop.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
+
+  // Stats
+  totalEl.textContent = sections.length;
+  footerTotal.textContent = sections.length;
+  heroCount.textContent = sections.length;
+  heroGroups.textContent = Object.keys(groups).length;
+  heroUpdated.textContent = data.updated;
   updatedEl.textContent = data.updated;
-  totalEl.textContent = data.sections.length;
+
   render();
 })();
 </script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
