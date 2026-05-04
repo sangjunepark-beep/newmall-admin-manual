@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>하나사인몰 신규몰 관리자 페이지 매뉴얼</title>
+<meta name="description" content="하나사인몰 신규몰 관리자 페이지 사용 매뉴얼 — 카테고리, 팝업, 기획전, 추천검색어 등 운영 가이드" />
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --bg-elev: #ffffff;
+    --text: #1a1d24;
+    --text-mute: #5b6471;
+    --border: #e3e6ec;
+    --accent: #2563eb;
+    --accent-soft: #e7efff;
+    --tag-bg: #eef1f6;
+    --tag-text: #424a5a;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(15,23,42,.05);
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1115;
+      --bg-elev: #161a21;
+      --text: #e7ebf3;
+      --text-mute: #98a1b0;
+      --border: #232934;
+      --accent: #6aa3ff;
+      --accent-soft: #1a2740;
+      --tag-bg: #232934;
+      --tag-text: #c7cfdc;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.4);
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+  }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static !important; height: auto !important; border-right: 0 !important; border-bottom: 1px solid var(--border); }
+    .sidebar-inner { max-height: 50vh; overflow-y: auto; }
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--bg-elev);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-inner { padding: 20px 16px; }
+  .brand {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 4px;
+    letter-spacing: -.01em;
+  }
+  .brand small { color: var(--text-mute); font-weight: 500; font-size: 12px; display: block; margin-top: 2px; }
+  .nav { list-style: none; padding: 0; margin: 14px 0 0; }
+  .nav li a {
+    display: block;
+    padding: 7px 10px;
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 13.5px;
+    border: 1px solid transparent;
+  }
+  .nav li a:hover { background: var(--tag-bg); text-decoration: none; }
+  .nav li a.active { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+
+  /* Main */
+  main { padding: 28px clamp(16px, 4vw, 56px); max-width: 1100px; }
+  .page-head {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 18px;
+    margin-bottom: 24px;
+  }
+  .page-head h1 {
+    margin: 0 0 6px;
+    font-size: clamp(22px, 3vw, 28px);
+    letter-spacing: -.02em;
+  }
+  .page-head p { color: var(--text-mute); margin: 0; font-size: 14px; }
+
+  /* Search bar */
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 18px 0 6px;
+    align-items: center;
+  }
+  .search {
+    flex: 1 1 300px;
+    position: relative;
+  }
+  .search input {
+    width: 100%;
+    padding: 10px 14px 10px 38px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .search::before {
+    content: "";
+    position: absolute;
+    left: 14px; top: 50%;
+    transform: translateY(-50%);
+    width: 14px; height: 14px;
+    border: 2px solid var(--text-mute);
+    border-radius: 50%;
+  }
+  .search::after {
+    content: "";
+    position: absolute;
+    left: 26px; top: 22px;
+    width: 8px; height: 2px;
+    background: var(--text-mute);
+    transform: rotate(45deg);
+  }
+  .meta {
+    color: var(--text-mute);
+    font-size: 12.5px;
+  }
+
+  /* Tag chips (filter) */
+  .tagbar {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 12px 0 8px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-size: 12px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    user-select: none;
+    transition: background .12s, color .12s;
+  }
+  .tag:hover { background: var(--accent-soft); color: var(--accent); }
+  .tag.active { background: var(--accent); color: #fff; }
+  .tagbar .clear {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-mute);
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+  }
+  .tagbar .clear:hover { color: var(--text); }
+
+  /* Sections */
+  section.card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 22px 18px;
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 16px;
+  }
+  section.card h2 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    letter-spacing: -.01em;
+  }
+  .crumb {
+    color: var(--text-mute);
+    font-size: 12.5px;
+    font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    margin-bottom: 10px;
+  }
+  .desc {
+    white-space: pre-wrap;
+    color: var(--text);
+    font-size: 14.5px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 10px 0 12px;
+  }
+  .images {
+    display: grid;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .images img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    cursor: zoom-in;
+    display: block;
+  }
+  .section-tags {
+    display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 4px;
+  }
+  .section-tags .tag { cursor: pointer; }
+
+  .empty {
+    padding: 40px 16px;
+    text-align: center;
+    color: var(--text-mute);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    margin-top: 20px;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.86);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+    cursor: zoom-out;
+  }
+  .lightbox.show { display: flex; }
+  .lightbox img {
+    max-width: 96vw;
+    max-height: 92vh;
+    border-radius: 8px;
+    box-shadow: 0 8px 40px rgba(0,0,0,.6);
+  }
+
+  /* Footer */
+  footer {
+    color: var(--text-mute);
+    font-size: 12px;
+    padding: 24px 0 8px;
+    border-top: 1px solid var(--border);
+    margin-top: 28px;
+  }
+
+  /* Highlight match */
+  mark {
+    background: #fde68a;
+    color: #1a1d24;
+    padding: 0 2px;
+    border-radius: 3px;
+  }
+  @media (prefers-color-scheme: dark) {
+    mark { background: #facc15; color: #1a1d24; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="brand">
+        하나사인몰 매뉴얼
+        <small>신규몰 관리자 페이지</small>
+      </div>
+      <ul class="nav" id="nav"></ul>
+    </div>
+  </aside>
+
+  <main>
+    <div class="page-head">
+      <h1>신규몰 관리자 페이지 매뉴얼</h1>
+      <p>운영 항목별로 빠르게 찾아 쓰는 가이드. 검색·태그 필터로 원하는 항목을 바로 찾으세요.</p>
+    </div>
+
+    <div class="toolbar">
+      <div class="search">
+        <input id="q" type="text" placeholder="제목·내용·태그·경로 검색 (예: 팝업, 기획전, CateType)" autocomplete="off" />
+      </div>
+      <div class="meta" id="count"></div>
+    </div>
+
+    <div class="tagbar" id="tagbar"></div>
+
+    <div id="sections"></div>
+    <div class="empty" id="empty" style="display:none;">검색 결과가 없습니다.</div>
+
+    <footer>
+      <div>마지막 업데이트: <span id="updated"></span> · 총 <span id="total"></span>개 항목</div>
+      <div>업데이트는 엑셀 원본 변경 시 재생성됩니다.</div>
+    </footer>
+  </main>
+</div>
+
+<div class="lightbox" id="lightbox"><img id="lightbox-img" alt="" /></div>
+
+<script id="data" type="application/json">{"updated": "2026-05-04", "sections": [{"id": "category-edit", "title": "카테고리 수정", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(상품)", "tags": ["카테고리", "메인관리", "분류", "정렬"], "desc": "메인 화면 카테고리 명칭/노출 순서를 수정합니다.", "images": ["image9.png"]}, {"id": "space-recommend", "title": "공간별 추천상품", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(상품)", "tags": ["공간별", "추천상품", "업종별", "CateType"], "desc": "공간별 추천상품은 업종별 화면에 노출됩니다. 검색 화면 이동 시 URL 세팅에 CateType 파라미터를 사용합니다.", "images": ["image6.png"]}, {"id": "image-register", "title": "이미지 등록", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(이미지)", "tags": ["이미지", "배너", "등록", "메인이미지"], "desc": "메인 배너/이미지를 등록·교체·정렬합니다.", "images": ["image31.png"]}, {"id": "popup-list", "title": "팝업창 리스트", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "팝업창", "리스트"], "desc": "전체 팝업창 목록을 관리합니다. 노출 순서가 화면 위치를 결정합니다.", "images": ["image13.png"]}, {"id": "popup-1", "title": "팝업창 — 노출순서 첫번째 상품", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "노출순서", "첫번째"], "desc": "노출순서 1번 팝업창 상품 등록 방법.", "images": ["image26.png"]}, {"id": "popup-2-3", "title": "팝업창 — 노출순서 두번째·세번째 상품", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "노출순서", "두번째", "세번째"], "desc": "노출순서 2번·3번 팝업창 상품 등록 방법.", "images": ["image18.png"]}, {"id": "popup-4-more", "title": "팝업창 — 노출순서 네번째 / 더보기 링크", "path": "관리자 페이지 > 상품전시/프로모션 > 팝업창 관리", "tags": ["팝업", "노출순서", "네번째", "더보기", "링크", "CateType", "URL"], "desc": "CateType=1 → 상품별, CateType=2 → 업종별\n\n검색 화면으로 이동시킬 때, 공간별 추천상품은 업종별 화면에 있어서 URL 세팅 시 추가가 필요합니다.\n\n기존 검색 URL + &CateType=1\n예: /Search.php?GetSearch=화장실&CCode=02&CateCou=1&GsNumsSearch=&CateType=1\n\n업종별 검색화면을 보여줘야 하면:\n/Search.php?GetSearch=화장실&CCode=02&CateCou=1&GsNumsSearch=\n(CateType 파라미터 제외) 형태로 세팅합니다.", "images": ["image10.png"]}, {"id": "position-edit", "title": "위치 수정", "path": "관리자 페이지 > 상품전시/프로모션", "tags": ["위치", "수정", "정렬", "노출"], "desc": "전시 영역 위치/순서를 수정합니다.", "images": ["image24.png"]}, {"id": "biz-doc", "title": "사업자등록증·통장사본 등록", "path": "관리자 페이지 > 게시판/자료실 > 자료실", "tags": ["사업자등록증", "통장사본", "자료실", "게시판"], "desc": "거래용 사업자등록증·통장사본 파일을 자료실에 업로드합니다.", "images": ["image30.png", "image19.png", "image8.png"]}, {"id": "search-keyword", "title": "추천검색어 등록", "path": "관리자 페이지 > 상품전시/프로모션 > 메인관리(상품) > 추천검색어", "tags": ["추천검색어", "검색어", "메인관리", "PC", "모바일"], "desc": "1. 관리자 페이지 상품전시/프로모션 → 메인관리(상품) → 제일 상단 '추천검색어' 버튼 클릭\n2. 타이틀 — 등록할 추천검색어 입력. 상품코드는 0으로 고정.\n3. 링크값 지정 — 신규몰 웹에서 검색 후 https://www.hanasignmall.kr 빼고 입력.\n   예: /Search.php?GetSearch=아파트게시판&CCode=01&CateCou=1&GsNumsSearch=\n4. 사용처 — PC / 모바일 / ALL 지정.\n5. 지정된 노출순서에 따라 노출됩니다.", "images": ["image23.png"]}, {"id": "category-option", "title": "카테고리 옵션 변경", "path": "관리자 페이지 > 상품관리 > 카테고리 관리", "tags": ["카테고리", "옵션", "변경", "수정"], "desc": "카테고리별 옵션값을 변경합니다.", "images": ["image14.png"]}, {"id": "promotion", "title": "기획전 설정", "path": "관리자 페이지 > 상품전시/프로모션 > 기획전 관리", "tags": ["기획전", "출력방식", "진열순서", "썸네일"], "desc": "■ 상품 출력방식\n  • 0 (기본값) : 한 줄에 상품 5개\n  • 1 : 한 줄에 상품 4개\n  • 2 : 왼쪽에 1개\n  • 3 : 오른쪽에 1개\n\n■ 진열순서\n  낮은 숫자부터 보여집니다.\n\n■ 기획전 모음 페이지\n  등록된 글(기획전)부터 노출됩니다. 기획전 썸네일 아래에 보여지는 상품은 해당 기획전 글 그룹1번 상품 4개가 노출됩니다.", "images": ["image4.png", "image7.png", "image2.png", "image12.png", "image28.png", "image15.png", "image27.png", "image22.png", "image20.png", "image11.png", "image1.png", "image25.png", "image5.png"]}, {"id": "promotion-collection-order", "title": "기획전 모음 순서 설정", "path": "관리자 페이지 > 상품전시/프로모션 > 기획전 관리", "tags": ["기획전", "모음", "순서", "정렬"], "desc": "기획전 모음 페이지 노출 순서를 설정합니다.", "images": ["image33.png", "image21.png"]}, {"id": "site-material", "title": "현장별 맞춤소재", "path": "관리자 페이지 > 상품전시/프로모션", "tags": ["현장별", "맞춤소재", "이벤트", "배너", "서브페이지"], "desc": "■ 초록색(소재) → 각 소재 상세페이지\n  관리자 페이지 상품전시/프로모션 → 이벤트 상품 등록 필요 및 링크 설정\n\n■ 파란색(상품) → 각 상품 상세페이지\n  관리자 페이지 상품전시/프로모션 → 메인 관리(상품) 현장별 맞춤소재 카테고리 설정 필요\n\n■ 더보기 → 현장별맞춤소재_서브페이지 화면으로 이동\n  배너 이미지 1개 고정 사용", "images": ["image16.png", "image32.png", "image34.png", "image29.png"]}, {"id": "edition", "title": "에디션 등록법", "path": "관리자 페이지 > 상품전시/프로모션", "tags": ["에디션", "등록", "페이지추가"], "desc": "에디션 페이지 추가가 필요할 경우 웹팀에 알려주세요. 등록 절차와 노출 영역 세팅이 함께 진행됩니다.", "images": ["image17.png"]}]}</script>
+<script>
+(function(){
+  const data = JSON.parse(document.getElementById('data').textContent);
+  const sectionsEl = document.getElementById('sections');
+  const navEl = document.getElementById('nav');
+  const tagbarEl = document.getElementById('tagbar');
+  const qEl = document.getElementById('q');
+  const countEl = document.getElementById('count');
+  const emptyEl = document.getElementById('empty');
+  const updatedEl = document.getElementById('updated');
+  const totalEl = document.getElementById('total');
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+
+  // collect tags
+  const tagSet = new Set();
+  data.sections.forEach(s => s.tags.forEach(t => tagSet.add(t)));
+  const allTags = Array.from(tagSet).sort();
+
+  // build tagbar
+  const activeTags = new Set();
+  allTags.forEach(t => {
+    const el = document.createElement('span');
+    el.className = 'tag';
+    el.textContent = '#' + t;
+    el.dataset.tag = t;
+    el.addEventListener('click', () => {
+      if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
+      el.classList.toggle('active');
+      render();
+    });
+    tagbarEl.appendChild(el);
+  });
+  const clearBtn = document.createElement('button');
+  clearBtn.className = 'clear';
+  clearBtn.textContent = '필터 초기화';
+  clearBtn.addEventListener('click', () => {
+    activeTags.clear();
+    qEl.value = '';
+    document.querySelectorAll('.tagbar .tag.active').forEach(e => e.classList.remove('active'));
+    render();
+  });
+  tagbarEl.appendChild(clearBtn);
+
+  // build nav
+  data.sections.forEach(s => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = '#' + s.id;
+    a.textContent = s.title;
+    a.dataset.id = s.id;
+    li.appendChild(a);
+    navEl.appendChild(li);
+  });
+
+  // build sections
+  data.sections.forEach(s => {
+    const card = document.createElement('section');
+    card.className = 'card';
+    card.id = s.id;
+    card.dataset.title = s.title;
+    card.dataset.tags = s.tags.join(',');
+    card.dataset.path = s.path;
+    card.dataset.desc = s.desc;
+
+    const h2 = document.createElement('h2');
+    h2.textContent = s.title;
+    card.appendChild(h2);
+
+    const cr = document.createElement('div');
+    cr.className = 'crumb';
+    cr.textContent = s.path;
+    card.appendChild(cr);
+
+    const tags = document.createElement('div');
+    tags.className = 'section-tags';
+    s.tags.forEach(t => {
+      const tg = document.createElement('span');
+      tg.className = 'tag';
+      tg.textContent = '#' + t;
+      tg.addEventListener('click', () => {
+        if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
+        document.querySelectorAll('.tagbar .tag').forEach(e => {
+          if (e.dataset.tag === t) e.classList.toggle('active');
+        });
+        render();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      });
+      tags.appendChild(tg);
+    });
+    card.appendChild(tags);
+
+    const desc = document.createElement('div');
+    desc.className = 'desc';
+    desc.textContent = s.desc;
+    card.appendChild(desc);
+
+    if (s.images && s.images.length) {
+      const imgs = document.createElement('div');
+      imgs.className = 'images';
+      s.images.forEach(src => {
+        const im = document.createElement('img');
+        im.src = 'images/' + src;
+        im.alt = s.title;
+        im.loading = 'lazy';
+        im.addEventListener('click', () => {
+          lbImg.src = im.src;
+          lb.classList.add('show');
+        });
+        imgs.appendChild(im);
+      });
+      card.appendChild(imgs);
+    }
+
+    sectionsEl.appendChild(card);
+  });
+
+  lb.addEventListener('click', () => lb.classList.remove('show'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('show'); });
+
+  function escapeReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+  function highlight(el, text, q) {
+    if (!q) { el.textContent = text; return; }
+    const re = new RegExp(escapeReg(q), 'gi');
+    el.innerHTML = text.replace(re, m => '<mark>' + m + '</mark>');
+  }
+
+  function render(){
+    const q = qEl.value.trim();
+    const lq = q.toLowerCase();
+    let visible = 0;
+    document.querySelectorAll('section.card').forEach(card => {
+      const title = card.dataset.title;
+      const tags = card.dataset.tags;
+      const path = card.dataset.path;
+      const desc = card.dataset.desc;
+      const haystack = (title + ' ' + tags + ' ' + path + ' ' + desc).toLowerCase();
+      const matchQ = !lq || haystack.includes(lq);
+      const matchTags = activeTags.size === 0 || Array.from(activeTags).every(t => tags.split(',').includes(t));
+      const show = matchQ && matchTags;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+      // highlight
+      if (show) {
+        highlight(card.querySelector('h2'), title, q);
+        highlight(card.querySelector('.desc'), desc, q);
+      }
+    });
+    countEl.textContent = visible + ' / ' + data.sections.length + ' 항목';
+    emptyEl.style.display = visible === 0 ? '' : 'none';
+    // nav active filter visual
+    const visibleIds = new Set();
+    document.querySelectorAll('section.card').forEach(c => { if (c.style.display !== 'none') visibleIds.add(c.id); });
+    document.querySelectorAll('#nav a').forEach(a => {
+      a.style.opacity = visibleIds.has(a.dataset.id) ? '1' : '0.35';
+    });
+  }
+
+  qEl.addEventListener('input', render);
+  qEl.addEventListener('keydown', e => { if (e.key === 'Escape') { qEl.value = ''; render(); }});
+
+  // scrollspy active
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('active', a.dataset.id === en.target.id));
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  document.querySelectorAll('section.card').forEach(c => obs.observe(c));
+
+  updatedEl.textContent = data.updated;
+  totalEl.textContent = data.sections.length;
+  render();
+})();
+</script>
+</body>
+</html>
